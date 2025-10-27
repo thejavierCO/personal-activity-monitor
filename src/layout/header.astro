@@ -1,6 +1,6 @@
 ---
-export let title:string = "astro App";
-
+const { title } = Astro.props;
+import "tailwindcss/index.css"
 ---
 
 <html lang="en">
@@ -11,7 +11,7 @@ export let title:string = "astro App";
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 	</head>
-	<body>
+	<body class="bg-black">
         <slot/>
 	</body>
 </html>

@@ -1,7 +1,15 @@
 ---
-import Main from "../components/header.astro"
+import Header from "../layout/header.astro"
+import NavBar from "../components/NavBar.svelte"
+import Content from "../components/BodyContent.svelte"
+import App from "../components/App.svelte"
 ---
 
-<Main title="Msg Private">
-	<h1>insert Message</h1>
-</Main>
+<Header title="Msg Private">
+	<NavBar>
+		<li><a href="/About">About</a></li>
+	</NavBar>
+	<Content>
+		<App client:only="svelte"/>
+	</Content>
+</Header>
