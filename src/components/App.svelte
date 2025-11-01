@@ -1,24 +1,19 @@
 <script>
-    import localStorageDb from "../js/store/localstore";
-    import {writable} from "svelte/store"
     import CardEvent from "../components/Card/cardEvent.svelte";
-    import {uuidv4} from "../js/main"
-    let Main = new localStorageDb()
-    let cards = Main.add("cards").defaultData("[]")
-    let db = writable(cards.toJSON())
-    db.subscribe(data=>cards.data = JSON.stringify(data))
+    import {uuidv4,tasks} from "../js/main"
+    let db = tasks
     function add(target){
         let [{title},{description}] = (Array.from(target.querySelectorAll("input"))).filter(el=>el.type!=="submit").map(el=>({[el.id]:el.value}))
         let [{status}] = (Array.from(target.querySelectorAll("select"))).map(el=>({[el.id]:el.value}))
         let data = {title,description,status}
-        let localdb = cards.toJSON()
+        let localdb = $db
         data.id = uuidv4()
         data.date = new Date().getTime()
         localdb.push(data)
         db.update(e=>localdb)
     }
     function complete(target){
-        let localdb = cards.toJSON()
+        let localdb = $db
         localdb = localdb.map(el=>{
             if(el.id==target.id){
                 el.status = target.querySelector("input[type=submit]").id
@@ -28,14 +23,10 @@
         db.update(e=>localdb)
     }
     function remove(target){
-        let localdb = cards.toJSON()
+        let localdb = $db
         localdb = localdb.filter(el=>el.id!=target.id)
         db.update(e=>localdb)
     }
-    cards.StorageUpdate(({newValue})=>{
-        if(newValue)db.update(e=>JSON.parse(newValue))
-        else db.update(e=>[])
-    })
 </script>
 
 {#each $db as {title,description,status,id}}
@@ -53,6 +44,7 @@
         {/if}
     </CardEvent>
 {/each}
+
 <CardEvent title="Agregar Actividad" className="bg-white text-lg" on:submit={({detail})=>add(detail)}>
     <label for="title"><span>Titulo:</span></label>
     <input type="text" name="title" id="title" placeholder="Titulo de la actividad" required/>
