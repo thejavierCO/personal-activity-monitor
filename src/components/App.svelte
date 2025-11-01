@@ -1,5 +1,4 @@
 <script>
-    import localStorageDb from "../js/store/localstore";
     import CardEvent from "../components/Card/cardEvent.svelte";
     import {uuidv4,tasks} from "../js/main"
     let db = tasks
